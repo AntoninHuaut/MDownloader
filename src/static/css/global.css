@@ -1,0 +1,24 @@
+.container-base {
+    padding-top: 50px;
+}
+
+.padding-bottom {
+    padding-bottom: 75px;
+}
+
+.navbar-expand-lg {
+    flex-flow: row nowrap !important;
+    justify-content: flex-start !important;
+}
+
+.title {
+    font-size: 30px;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+.subTitle {
+    font-size: 24px;
+    font-weight: 450;
+    margin-bottom: 20px;
+}

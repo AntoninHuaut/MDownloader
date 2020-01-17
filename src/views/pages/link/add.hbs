@@ -1,0 +1,25 @@
+<div class="container container-base">
+    <div class="title">
+        <label>Add links</label>
+    </div>
+
+    <form id="form" action="/link/checkAdd" method="POST" onsubmit="return submitForm(this, '/link/checkAdd');">
+        <div id="linkParent">
+
+        </div>
+
+        <div class="d-flex">
+            <div class="mr-auto p-2">
+                <a href="/">
+                    <button type="button" class="btn btn-danger btn-lg">Back</button>
+                </a>
+            </div>
+
+            <div class="p-2">
+                <button class="btn btn-success btn-lg" type="submit">Confirm</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript" src="/js/link/add.js"></script>
+<script type="text/javascript" src="/js/submitForm.js"></script>

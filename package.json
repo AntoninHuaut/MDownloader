@@ -1,0 +1,39 @@
+{
+  "name": "mdownloader",
+  "version": "1.0.0",
+  "description": "Download youtube videos/songs",
+  "main": "src/apps.js",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "build": {
+    "productName": "MDownloader",
+    "appId": "fr.maner.mdownloader",
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "src/logo.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "express-hbs": "^2.3.0",
+    "moment": "^2.24.0",
+    "ytdl-core": "^1.0.6"
+  },
+  "devDependencies": {
+    "electron": "^7.1.9",
+    "electron-builder": "^22.2.0"
+  }
+}

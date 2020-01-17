@@ -1,0 +1,33 @@
+<div class="container-fluid container-base padding-bottom">
+    {{#each cardDeck}}
+    <div class="card-deck">
+        {{#each this}}
+        <div class="card mt-4">
+            {{#if this.title}}
+            <img class="card-img-top" src="{{this.thumbnail.url}}" />
+
+            <div class="card-body">
+                <h5 class="card-title">{{this.title}}</h5>
+            </div>
+
+            <div class="card-footer">
+                <button class="btn btn-primary" onclick="download('{{this.videoId}}')">Download</button>
+                <button class="btn btn-primary" onclick="remove('{{this.videoId}}')">Remove</button>
+            </div>
+            {{/if}}
+        </div>
+        {{/each}}
+    </div>
+    {{/each}}
+</div>
+
+<nav id="navbar" class="navbar fixed-bottom navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <div class="nav-item">
+            <div class="ml-4 d-inline-block">
+                <a class="navbar-brand" href="/">WIP</a>
+            </div>
+        </div>
+    </div>
+</nav>
+<script type="text/javascript" src="/js/link/list.js"></script>
