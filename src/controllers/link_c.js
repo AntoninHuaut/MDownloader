@@ -38,7 +38,7 @@ exports.checkAdd = async function (req, res) {
 exports.list = async function (req, res) {
     const linkList = cacheManager.getLinkList();
     const listSize = linkList.length;
-    if (!listSize) return res.redirect('/');
+    if (!listSize) return res.redirect('/link/add');
 
     const linkChunk = [];
     while (linkList.length > 0)
