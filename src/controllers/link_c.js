@@ -37,7 +37,8 @@ exports.checkAdd = async function (req, res) {
 
 exports.list = async function (req, res) {
     const linkList = linkManager.getLinkList();
-    if (!linkList.length) return res.redirect('/link/add');
+    const listSize = linkList.length;
+    if (!listSize) return res.redirect('/link/add');
 
     const linkChunk = [];
     while (linkList.length > 0)
@@ -48,8 +49,14 @@ exports.list = async function (req, res) {
         lastChunk.push({});
 
     res.render('link/list', {
-        cardDeck: linkChunk
+        cardDeck: linkChunk,
+        nbVideo: listSize
     });
+}
+
+exports.downloadAll = async function (req, res) {
+    downloadManager.downloadAllVid();
+    res.redirect('/');
 }
 
 exports.download = async function (req, res) {

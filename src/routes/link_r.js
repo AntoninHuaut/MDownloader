@@ -7,6 +7,7 @@ const controller = require("../controllers/link_c");
 
 router.get("/add", controller.add);
 router.get("/list", controller.list);
+router.get("/downloadAll", controller.downloadAll);
 
 router.post("/checkAdd", urlencodedParser, controller.checkAdd);
 
