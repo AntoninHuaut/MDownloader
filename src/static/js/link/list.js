@@ -1,4 +1,6 @@
-function download(videoId) {}
+function download(videoId) {
+    action("/link/download", videoId);
+}
 
 function remove(videoId) {
     action("/link/remove", videoId)
@@ -25,15 +27,6 @@ function action(url, videoId) {
                 })
             })
             .then(res => res.json())
-            .then(res => {
-                let msg = res.msg.replace(/\n/g, '<br/>');
-
-                if (res.code === 200)
-                    toastr.success(msg, "Success", opt);
-                else
-                    toastr.error(msg, "Error", opt);
-
-                resolve(res.code === 200);
-            });
+            .then(res => resolve(res.code === 200));
     });
 }

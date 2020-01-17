@@ -1,3 +1,4 @@
+const filenamify = require('filenamify');
 const ytdl = require('ytdl-core');
 
 module.exports = class EDTCache {
@@ -21,6 +22,7 @@ module.exports = class EDTCache {
                     url: url,
                     videoId: videoId,
                     title: info.title,
+                    titleSafe: filenamify(info.title),
                     formats: info.formats,
                     thumbnail: thumbnails[thumbnails.length - 1]
                 }));
@@ -41,6 +43,11 @@ module.exports = class EDTCache {
 
     inList(videoId) {
         return this.linkList.filter(item => item.videoId === videoId).length > 0;
+    }
+
+    getInfo(videoId) {
+        const videoInfo = this.linkList.filter(item => item.videoId === videoId);
+        return videoInfo.length > 0 ? videoInfo[0] : null;
     }
 
     getLinkList() {

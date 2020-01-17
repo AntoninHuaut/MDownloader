@@ -9,6 +9,10 @@ exports.removeVid = (videoId) => {
     return cache.removeVid(videoId);
 }
 
+exports.getInfo = (videoId) => {
+    return cache.getInfo(videoId);
+}
+
 exports.getLinkList = () => {
     return cache.getLinkList().map(x => x); // Clone
 }

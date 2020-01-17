@@ -1,4 +1,5 @@
 const ytdl = require('ytdl-core');
+const downloadManager = require('../utils/downloadManager');
 const linkManager = require('../utils/linkManager');
 
 exports.add = async function (req, res) {
@@ -36,17 +37,15 @@ exports.checkAdd = async function (req, res) {
 
 exports.list = async function (req, res) {
     const linkList = linkManager.getLinkList();
-    const linkChunk = [];
+    if (!linkList.length) return res.redirect('/link/add');
 
+    const linkChunk = [];
     while (linkList.length > 0)
         linkChunk.push(linkList.splice(0, 3));
 
-    if (linkChunk.length > 0) {
-        const lastChunk = linkChunk[linkChunk.length - 1];
-
-        while (lastChunk.length < 3)
-            lastChunk.push({});
-    }
+    const lastChunk = linkChunk[linkChunk.length - 1];
+    while (lastChunk.length < 3)
+        lastChunk.push({});
 
     res.render('link/list', {
         cardDeck: linkChunk
@@ -54,7 +53,16 @@ exports.list = async function (req, res) {
 }
 
 exports.download = async function (req, res) {
+    const videoId = req.body.videoId;
+    if (!ytdl.validateID(videoId)) return sendRes(res, 400, {
+        msg: "Invalid videoId"
+    });
 
+    downloadManager.downloadVid(videoId).then(() => {
+        sendRes(res, 200, {
+            msg: "Video download"
+        });
+    });
 }
 
 exports.remove = async function (req, res) {
