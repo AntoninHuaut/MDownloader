@@ -1,7 +1,7 @@
 const filenamify = require('filenamify');
 const ytdl = require('ytdl-core');
 
-module.exports = class EDTCache {
+module.exports = class LinkCache {
     constructor() {
         this.linkList = [];
     }

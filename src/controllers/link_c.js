@@ -1,6 +1,6 @@
 const ytdl = require('ytdl-core');
 const downloadManager = require('../utils/downloadManager');
-const linkManager = require('../utils/linkManager');
+const cacheManager = require('../utils/cacheManager');
 
 exports.add = async function (req, res) {
     res.render('link/add');
@@ -18,7 +18,7 @@ exports.checkAdd = async function (req, res) {
         msg: "There is no valid link"
     });
 
-    const linkProms = linkList.map(map => linkManager.addLink(map));
+    const linkProms = linkList.map(map => cacheManager.addLink(map));
 
     Promise.all(linkProms)
         .then(linkListRes => {
@@ -36,9 +36,9 @@ exports.checkAdd = async function (req, res) {
 }
 
 exports.list = async function (req, res) {
-    const linkList = linkManager.getLinkList();
+    const linkList = cacheManager.getLinkList();
     const listSize = linkList.length;
-    if (!listSize) return res.redirect('/link/add');
+    if (!listSize) return res.redirect('/');
 
     const linkChunk = [];
     while (linkList.length > 0)
@@ -50,7 +50,8 @@ exports.list = async function (req, res) {
 
     res.render('link/list', {
         cardDeck: linkChunk,
-        nbVideo: listSize
+        nbVideo: listSize,
+        formatList: cacheManager.getFormatList()
     });
 }
 
@@ -78,7 +79,7 @@ exports.remove = async function (req, res) {
         msg: "Invalid videoId"
     });
 
-    linkManager.removeVid(videoId);
+    cacheManager.removeVid(videoId);
 
     sendRes(res, 200, {
         msg: "Video removed"

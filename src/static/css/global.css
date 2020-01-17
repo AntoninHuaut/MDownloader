@@ -6,6 +6,11 @@
     padding-bottom: 75px;
 }
 
+.inline-formControl {
+    display: inline-block !important;
+    width: auto !important;
+}
+
 .navbar-expand-lg {
     flex-flow: row nowrap !important;
     justify-content: flex-start !important;

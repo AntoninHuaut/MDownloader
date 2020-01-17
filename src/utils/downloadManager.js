@@ -7,12 +7,17 @@ const fs = require('fs');
 const nodePath = require('path');
 const ytdl = require('ytdl-core');
 
-const linkManager = require('./linkManager');
+const cacheManager = require('./cacheManager');
 
 exports.downloadVid = (videoId) => {
     return new Promise(async (resolve) => {
-        const videoInfo = linkManager.getInfo(videoId);
-        const path = askPathVid(videoInfo);
+        const videoInfo = cacheManager.getInfo(videoId);
+        const defaultFormat = cacheManager.getDefaultFormat();
+
+        let path = askPathVid(videoInfo);
+        if (!path) return resolve();
+        
+        path += '.' + defaultFormat.ext;
 
         await this.startDownloadVid(videoInfo, path, 1, 1);
 
@@ -25,8 +30,11 @@ exports.startDownloadVid = (videoInfo, path, nb, total) => {
     return new Promise((resolve) => {
         if (!path) return resolve();
 
+        const defaultFormat = cacheManager.getDefaultFormat();
+
         const video = ytdl(videoInfo.videoId, {
-            filter: (format) => format.container === 'mp4'
+            filter: defaultFormat.filter,
+            quality: 'highest'
         });
 
         video.pipe(fs.createWriteStream(path));
@@ -36,7 +44,7 @@ exports.startDownloadVid = (videoInfo, path, nb, total) => {
             const progressBar = new ProgressBar({
                 indeterminate: false,
                 text: videoInfo.title,
-                title: `Downloading video ${nb}/${total}`,
+                title: `Downloading file ${nb}/${total}`,
                 browserWindow: {
                     webPreferences: {
                         nodeIntegration: true
@@ -52,6 +60,7 @@ exports.startDownloadVid = (videoInfo, path, nb, total) => {
             res.on('end', () => {
                 progressBar.setCompleted();
                 progressBar.close();
+
                 resolve();
             });
         });
@@ -60,24 +69,27 @@ exports.startDownloadVid = (videoInfo, path, nb, total) => {
 
 function askPathVid(videoInfo) {
     return dialog.showSaveDialogSync({
-        title: "MDownloader : Path",
-        defaultPath: videoInfo.titleSafe + ".mp4",
+        title: "MDownloader: Where to save the video?",
+        defaultPath: videoInfo.titleSafe,
         buttonLabel: "Save here"
     });
 }
 
 exports.downloadAllVid = () => {
     return new Promise(async (resolve) => {
+        const defaultFormat = cacheManager.getDefaultFormat();
+        
         let path = askPathFolder();
         if (!path || !path.length) return resolve();
         path = path[0] += '\\';
 
-        const videoList = linkManager.getLinkList();
+
+        const videoList = cacheManager.getLinkList();
         const dlProms = [];
 
         for (let video of videoList) {
-            const videoInfo = linkManager.getInfo(video.videoId);
-            dlProms.push(this.startDownloadVid(videoInfo, path + videoInfo.titleSafe + '.mp4', videoList.indexOf(video) + 1, videoList.length));
+            const videoInfo = cacheManager.getInfo(video.videoId);
+            dlProms.push(this.startDownloadVid(videoInfo, path + videoInfo.titleSafe + '.' + defaultFormat.ext, videoList.indexOf(video) + 1, videoList.length));
         }
 
         Promise.all(dlProms).then(() => dialogDownloadEnd(path, null, dlProms.length, true));
@@ -86,7 +98,7 @@ exports.downloadAllVid = () => {
 
 function askPathFolder() {
     return dialog.showOpenDialogSync({
-        title: "MDownloader : Path",
+        title: "MDownloader: Where to save the videos?",
         properties: ['openDirectory'],
         buttonLabel: "Choose this folder"
     });
@@ -94,13 +106,13 @@ function askPathFolder() {
 
 function dialogDownloadEnd(pathFolder, pathFile, total, isDownloadAll) {
     const buttons = ['Ok', 'Open folder'];
-    if (!isDownloadAll && pathFile) buttons.push('Open video');
+    if (!isDownloadAll && pathFile) buttons.push('Open file');
 
     const options = {
         type: 'info',
         buttons: buttons,
         title: 'Download completed',
-        message: `All ${total} video${total > 1 ? 's' : ''} have been downloaded`
+        message: `All file${total > 1 ? 's' : ''} (${total}) have been downloaded`
     };
 
     const indexSelect = dialog.showMessageBoxSync(options);

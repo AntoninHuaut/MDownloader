@@ -8,6 +8,8 @@ module.exports = () => {
     return new Promise((resolve, reject) => {
         web.use(bodyParser.json());
 
+        hbs.registerHelper('ifcond', (v1, v2, options) => v1 === v2 ? options.fn(this) : options.inverse(this));
+
         web.engine('hbs', hbs.express4({
             partialsDir: path.join(__basedir, '/views/partials'),
             layoutsDir: path.join(__basedir, '/views/layouts'),
