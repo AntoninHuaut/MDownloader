@@ -69,7 +69,7 @@ exports.startDownloadVid = (videoInfo, path, nb, total) => {
 
 function askPathVid(videoInfo) {
     return dialog.showSaveDialogSync({
-        title: "MDownloader: Where to save the video?",
+        title: "MDownloader: Save as",
         defaultPath: videoInfo.titleSafe,
         buttonLabel: "Save here"
     });
@@ -98,7 +98,7 @@ exports.downloadAllVid = () => {
 
 function askPathFolder() {
     return dialog.showOpenDialogSync({
-        title: "MDownloader: Where to save the videos?",
+        title: "MDownloader: Save as",
         properties: ['openDirectory'],
         buttonLabel: "Choose this folder"
     });
@@ -112,7 +112,7 @@ function dialogDownloadEnd(pathFolder, pathFile, total, isDownloadAll) {
         type: 'info',
         buttons: buttons,
         title: 'Download completed',
-        message: `All file${total > 1 ? 's' : ''} (${total}) have been downloaded`
+        message: `The file${total > 1 ? 's' : ''} (${total}) have been downloaded`
     };
 
     const indexSelect = dialog.showMessageBoxSync(options);

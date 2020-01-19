@@ -21,7 +21,7 @@ module.exports = () => {
         web.use(require("./routes"));
 
         web.listen(config.port, resolve).on('error', (err) => reject({
-            info: "Port occupé",
+            info: "Busy port",
             err: err
         }));
     });
